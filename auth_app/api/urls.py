@@ -3,5 +3,5 @@ from .views import RegisterView, CookieLoginView, CookieLogoutView
 urlpatterns = [
     path('register/', RegisterView.as_view(), name="register"),
     path('login/', CookieLoginView.as_view(), name="login"),
-    # path('logout/', CookieLogoutView.as_view(), name="logout"),
+    path('logout/', CookieLogoutView.as_view(), name="logout"),
 ]
