@@ -1,6 +1,7 @@
+from django.db import transaction, IntegrityError
 from django.contrib.auth import get_user_model
 from rest_framework import serializers
-from django.db import transaction, IntegrityError
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 User = get_user_model()
 
 
@@ -28,3 +29,42 @@ class RegisterSerializer(serializers.ModelSerializer):
                 return user
         except IntegrityError:
             raise serializers.ValidationError({"detail":"Try again! We have a error to save your data right now"})
+        
+class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
+    def validate(self, attrs):
+        data = super().validate(attrs)
+
+        data["user"]= {
+            "id": self.user.id,
+            "username": self.user.username,
+            "email": self.user.email,
+        }
+        return data
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
