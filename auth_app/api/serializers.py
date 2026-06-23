@@ -6,6 +6,12 @@ User = get_user_model()
 
 
 class RegisterSerializer(serializers.ModelSerializer):
+    """
+    Serializer for handling new user registration requests.
+    
+    Validates user credentials, ensures email uniqueness, confirms password 
+    matching, and creates user records safely using database transactions.
+    """
     password = serializers.CharField(write_only=True)
     confirmed_password = serializers.CharField(write_only=True)
     class Meta():
@@ -31,6 +37,13 @@ class RegisterSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError({"detail":"Try again! We have a error to save your data right now"})
         
 class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
+    """
+    Custom JWT Token serializer extending SimpleJWT's base class.
+    
+    Injects a serialized representation of the user's basic profile details 
+    directly into the validation payload, allowing authentication views to 
+    extract and pass user meta-information down to the client.
+    """
     def validate(self, attrs):
         data = super().validate(attrs)
 

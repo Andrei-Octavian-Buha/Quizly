@@ -8,8 +8,22 @@ from .serializers import RegisterSerializer, CustomTokenObtainPairSerializer
 
 
 class CookieLoginView(TokenObtainPairView):
+    """
+    API View to authenticate a user and issue JWT tokens inside secure HTTP-only cookies.
+    
+    Instead of returning access and refresh tokens directly in the JSON response payload,
+    this view intercepts the validated data and binds the tokens securely as cookies 
+    to mitigate Cross-Site Scripting (XSS) risks.
+    """
     serializer_class = CustomTokenObtainPairSerializer
     def post(self, request, *args, **kwargs):
+        """
+        Authenticates user credentials and signs HttpOnly cookies.
+        
+        Returns:
+            Response: JSON containing success details and basic user profile information.
+            Cookies: 'access_token' and 'refresh_token' marked as HttpOnly, Secure, and SameSite=Lax.
+        """
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
 
@@ -42,8 +56,20 @@ class CookieLoginView(TokenObtainPairView):
         return response
     
 class CookieLogoutView(APIView):
+    """
+    API View to log out a user by invalidating tokens and clearing cookies.
+    
+    Requires an active authenticated session. Extracts the refresh token from 
+    the incoming request cookies to blacklist it serverside, preventing reuse.
+    """
     permission_classes = [IsAuthenticated]
     def post(self, request, *args, **kwargs):
+        """
+        Blacklists the refresh token and flushes auth cookies from the client browser.
+        
+        Returns:
+            Response: 200 OK status clarifying that tokens are no longer valid.
+        """
         refresh_token = request.COOKIES.get("refresh_token")
         if refresh_token:
             try:
@@ -62,7 +88,22 @@ class CookieLogoutView(APIView):
         return response  
 
 class CookieTokenRefreshView(TokenRefreshView):
+    """
+    API View to renew short-lived access tokens using the refresh token cookie.
+    
+    Reads the refresh token seamlessly out of HTTP-only request cookies, passing it
+    to SimpleJWT for structural validation. Protects the frontend from needing to
+    track token lifetimes manually via localStorage.
+    """
     def post(self, request, *args, **kwargs):
+        """
+        Validates the current refresh cookie and issues a brand new access cookie.
+        
+        If token rotation is active, a fresh tracking refresh token cookie is also bound.
+        
+        Returns:
+            Response: 200 OK simple success indicator or 400/401 validation failures.
+        """
         refresh_token = request.COOKIES.get('refresh_token')
 
         if refresh_token is None:
@@ -104,9 +145,20 @@ class CookieTokenRefreshView(TokenRefreshView):
         return response
 
 class RegisterView(APIView):
+    """
+    API View to sign up new accounts in the system.
+    
+    Accessible publicly by unauthenticated visitors to initialize their profiles.
+    """
     permission_classes = [AllowAny]
 
     def post(self, request):
+        """
+        Validates incoming profile registration structures and provisions the user record.
+        
+        Returns:
+            Response: 201 Created on valid inputs, or 400 Bad Request with inline validation fields.
+        """
         serializer = RegisterSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
@@ -116,7 +168,3 @@ class RegisterView(APIView):
                 }, status=status.HTTP_201_CREATED
             )
         return  Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    
-
-
-    #From here you can start a app with register/login model done
