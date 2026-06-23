@@ -129,7 +129,6 @@ STATIC_URL = 'static/'
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
-        # 'rest_framework.authentication.TokenAuthentication',
         'auth_app.api.authenticate.CustomJWTAuthentication',
     ],
     'DEFAULT_PERMISSION_CLASSES': [
