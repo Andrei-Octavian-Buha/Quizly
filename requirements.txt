@@ -1,25 +1,12 @@
-# --- Framework Core & Rest API ---
+# --- Backend Framework ---
 Django==6.0.6
 django-cors-headers==4.9.0
 djangorestframework==3.17.1
 djangorestframework_simplejwt==5.5.1
-PyJWT==2.13.0
-
-# --- Configuration & Networking ---
 python-dotenv==1.2.2
-requests==2.34.2
-urllib3==2.7.0
-certifi==2026.6.17
 
-# --- Media & AI Pipeline ---
+# --- Media, Automation & AI Pipeline ---
 yt-dlp==2026.6.9
 openai-whisper==20250625
 google-genai==2.8.0
-google-auth==2.55.0
-
-# --- Core Math & ML Foundations (Necisare pentru Whisper/Torch/Gemini JSON) ---
 torch==2.12.1
-numpy==2.4.6
-pydantic==2.13.4
-tiktoken==0.13.0
-tqdm==4.68.3
