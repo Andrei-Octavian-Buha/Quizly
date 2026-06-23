@@ -49,3 +49,16 @@ Before running database migrations or booting up the server, you need to configu
 ```env
 # Core API Keys
 GEMINI_API_KEY=your_actual_gemini_api_key_here
+```
+
+⚠️ Security Warning: If you ever change or deploy this project, make sure your real API keys are never pushed to public commits.
+
+🚀 Verifying the Server
+
+Once you execute the server execution setup steps, open your browser or API testing environment and point it to:
+http://127.0.0.1:8000/
+
+To easily view your data in a graphical dashboard, you can optionally provision a management profile to log into the Django Administration Interface (http://127.0.0.1:8000/admin/) by executing:
+```Bash
+python manage.py createsuperuser
+```
