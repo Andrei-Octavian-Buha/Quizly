@@ -29,7 +29,8 @@ Before installing the Python dependencies, you must ensure that **FFmpeg** is in
 | :--- | :--- | :--- |
 | Repository | Clone the backend repository | `git clone <repository_url>` |
 | Project Setup | Change to project directory | `cd Quizly` |
-| Environment | Create a Python virtual environment | `python -m venv .venv` |
+| Environment | Create a Python virtual environment (Linux)| `python3 -m venv .venv` |
+| Environment | Create a Python virtual environment (Windows) | `python -m venv .venv` |
 | Environment | Activate environment (Linux/macOS) | `source .venv/bin/activate` |
 | Environment | Activate environment (Windows) | `.venv\Scripts\activate` |
 | Dependencies | Install required libraries & packages | `pip install -r requirements.txt` |
